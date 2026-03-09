@@ -10,13 +10,13 @@ class Feature(Enum):
     LIST = 5
     CURLY_QUOTATION = 6
     TABLE = 7
-    VOCAB = 8
-    NEG_PARALLELISM = 9
-    TRANSITION_WORD = 10
-    GRAMMAR = 11
-    TEMPLATE = 12
+    TEMPLATE = 8
+    GRAMMAR = 9
+    VOCAB = 10
+    TRANSITION_WORD = 11
     # ------------------- Group B: Features related to content ------------------- #
-    RULE_OF_3 = 13
+    NEG_PARALLELISM = 12
+    RULE_OF_THREE = 13
     BASIC_COPULATIVE = 14
     ELEG_VARIATION = 15
     # ------------------------- Group C: Binary features ------------------------- #
@@ -30,7 +30,11 @@ regex_dict: dict[Feature, str] = {
     Feature.EMDASH: r"—",
     Feature.EMOJI: r"/(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/g",
     Feature.BOLD: r"<(b|strong|i|em)>.*[^>]<\/(b|strong|i|em)>",
-    Feature.TITLE_CASE: r"^(?:[A-Z][^\s]*\s?)+$"
+    Feature.TITLE_CASE: r"^(?:[A-Z][^\s]*\s?)+$",
+    Feature.LIST: r"<ul>|<ol>",
+    Feature.CURLY_QUOTATION: r"‘|“",
+    Feature.TABLE: r"<table>",
+    Feature.TEMPLATE: r"\[.+\]"
 }
 
 
