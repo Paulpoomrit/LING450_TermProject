@@ -13,17 +13,16 @@ class Feature(Enum):
     TEMPLATE = 8
     GRAMMAR = 9
     VOCAB = 10
-    TRANSITION_WORD = 11
     # ------------------- Group B: Features related to content ------------------- #
-    NEG_PARALLELISM = 12
-    RULE_OF_THREE = 13
-    BASIC_COPULATIVE = 14
-    ELEG_VARIATION = 15
+    NEG_PARALLELISM = 11
+    RULE_OF_THREE = 12
+    BASIC_COPULATIVE = 13
+    ELEG_VARIATION = 14
     # ------------------------- Group C: Binary features ------------------------- #
-    SUBJECT_LINE = 16
-    COMMUNICATION = 17
-    KNOWLEDGE_CUTOFF = 18
-    SUMMARY = 19
+    SUBJECT_LINE = 15
+    COMMUNICATION = 16
+    KNOWLEDGE_CUTOFF = 17
+    SUMMARY = 18
 
 
 regex_dict: dict[Feature, str] = {
@@ -58,6 +57,10 @@ def count_all_words_in_list(text: str, words: list[str]):
     return
 
 def extract_group_a(text: str, feature_type: Feature, total_num_words: int):
+
+    if feature_type == Feature.VOCAB:
+        return count_all_words_in_list(text, ai_vocab)
+
     regex = regex_dict[feature_type]
     match_list = re.findall(regex, text)
     return len(match_list)
