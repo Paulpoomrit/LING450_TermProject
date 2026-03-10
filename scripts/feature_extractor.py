@@ -66,31 +66,12 @@ def extract_group_a(text: str, feature_type: Feature, total_num_words: int):
     return len(match_list) / total_num_words
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 def extract_features(document_path: str):
    with open(document_path, 'r') as file:
        for line in file:
+           # TODO: extract feature here
            print(line)
            print('-----')
 
+## Test
 extract_features("/Users/paulpoomrit/1_SFU/8_Spring_2026/LING450_CompLing/LING450_TermProject/data/coca-samples-text/text_acad.txt")
