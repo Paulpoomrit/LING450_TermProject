@@ -1,5 +1,5 @@
 import csv
-from transformers import pipeline
+from transformers import pipeline, AutoModelForCausalLM, AutoTokenizer
 import torch
 from enum import Enum
 
@@ -16,11 +16,21 @@ _ai_prompt = "Consider the following text and imagine you were a human prompter,
 
 
 def get_ai_prompt_from_transfomers(human_text: str, model_id: str) -> str:
+
+    model = AutoModelForCausalLM.from_pretrained(
+        model_id,
+        device_map = "auto",
+        dtype = "auto",
+        # offload_folder="offload",
+        # trust_remote_code = True
+    )
+
+    tokenizer = AutoTokenizer.from_pretrained(model_id)
+
     pipe = pipeline(
         "text-generation",
-        model=model_id,
-        torch_dtype="auto",
-        device_map="auto",
+        model=model,
+        tokenizer=tokenizer
     )
 
     messages = [
@@ -36,27 +46,32 @@ def get_ai_prompt_from_transfomers(human_text: str, model_id: str) -> str:
 
 def get_ai_prompt(human_text: str, model_enum = Model) -> str:
 
-    prompt = ""
-
     match model_enum:
         case Model.GPT_OSS:
-            prompt = get_ai_prompt_from_transfomers(human_text, "openai/gpt-oss-20b")
+            return get_ai_prompt_from_transfomers(human_text, "openai/gpt-oss-20b")
         case Model.PHI_THREE_MINI:
-            prompt = get_ai_prompt_from_transfomers(human_text, "microsoft/Phi-3-mini-4k-instruct")
+            return get_ai_prompt_from_transfomers(human_text, "microsoft/Phi-3-mini-4k-instruct")
         case _:
-            prompt = get_ai_prompt_from_transfomers(human_text, "openai/gpt-oss-20b")
-
-    return prompt
+            return get_ai_prompt_from_transfomers(human_text, "microsoft/Phi-3-mini-4k-instruct")
 
 
 def get_ai_counterpart_from_transformers(human_text: str, model_id: str) -> str:
-    prompt = get_ai_prompt(human_text)
+    prompt = get_ai_prompt(human_text, Model.PHI_THREE_MINI)
+
+    model = AutoModelForCausalLM.from_pretrained(
+        model_id,
+        device_map = "auto",
+        dtype = "auto",
+        # offload_folder="offload",
+        # trust_remote_code = True
+    )
+
+    tokenizer = AutoTokenizer.from_pretrained (model_id)
 
     pipe = pipeline(
         "text-generation",
-        model=model_id,
-        torch_dtype="auto",
-        device_map="auto",
+        model=model,
+        tokenizer=tokenizer
     )
 
     messages = [
@@ -76,13 +91,11 @@ def get_ai_counterpart(human_text: str, model_enum = Model) -> str:
 
     match model_enum:
         case Model.GPT_OSS:
-            ai_text = get_ai_counterpart(human_text, "openai/gpt-oss-20b")
+            return get_ai_counterpart_from_transformers(human_text, "openai/gpt-oss-20b")
         case Model.PHI_THREE_MINI:
-            ai_text = get_ai_prompt_from_transfomers(human_text, "microsoft/Phi-3-mini-4k-instruct")
+            return get_ai_counterpart_from_transformers(human_text, "microsoft/Phi-3-mini-4k-instruct")
         case _:
-            ai_text = get_ai_counterpart(human_text, "openai/gpt-oss-20b")
-
-    return ai_text
+            return get_ai_counterpart_from_transformers(human_text, "microsoft/Phi-3-mini-4k-instruct")
 
 
 def process_doc(document_path: str):
@@ -118,5 +131,4 @@ def main():
 
 
 # main()
-print(get_ai_prompt("We live in capitalism, its power seems inescapable — but then, so did the divine right of kings. Any human power can be resisted and changed by human beings. Resistance and change often begin in art. Very often in our art, the art of words."),
-Model.PHI_THREE_MINI)
+print(get_ai_counterpart("We live in capitalism, its power seems inescapable — but then, so did the divine right of kings. Any human power can be resisted and changed by human beings. Resistance and change often begin in art. Very often in our art, the art of words.",Model.PHI_THREE_MINI))

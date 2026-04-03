@@ -1,6 +1,8 @@
 from enum import Enum
 import re
 import language_tool_python
+import nltk
+nltk.download('punkt_tab')
 
 class Feature(Enum):
     # --------- Group A: Features related to language, grammar and style --------- #
@@ -15,7 +17,7 @@ class Feature(Enum):
     GRAMMAR = 9
     VOCAB = 10
     # ------------------- Group B: Features related to content ------------------- #
-    NEG_PARALLELISM = 11 #TODO
+    NEG_PARALLELISM = 11
     RULE_OF_THREE = 12 #TODO
     BASIC_COPULATIVE = 13 #TODO
     ELEG_VARIATION = 14 #TODO
@@ -64,6 +66,20 @@ def count_all_grammartical_mistakes(text: str) -> int:
         return len(matches)
     return -1
 
+def count_negative_parallelism(text: str) -> int:
+    """ Returns the ratio of sentences with negative parallelism to
+    all sentences with negative sentiment
+    (that does or does not come with its parallel counterpart). """
+
+    text = text.lower()
+    neg_paralleism_match = re.findall(r"(?:(?:\bnot\b|\bno\b){1}|\bain['’]t\b|\bisn['’]t\b|\bis not\b)(?:.*?(?:\bbut\b|\bhowever\b|\brather\b|\bis\b|['’]s))", text)
+    all_neg_match = re.findall(r"(?:(?:\bnot\b|\bno\b){1}|\bain['’]t\b|\bisn['’]t\b|\bis not\b)", text)
+
+    if len(neg_paralleism_match) == 0:
+        return 0
+
+    return len(neg_paralleism_match)/ len(all_neg_match)
+
 def extract_group_a(text: str, feature_type: Feature, total_num_words: int):
 
     if feature_type == Feature.VOCAB:
@@ -83,5 +99,6 @@ def extract_features(document_path: str):
 
 ## Test
 #extract_features("/Users/paulpoomrit/1_SFU/8_Spring_2026/LING450_CompLing/LING450_TermProject/data/coca-samples-text/text_acad.txt")
-print(count_all_grammartical_mistakes("I is Paul."))
-# print('yo')
+#print(count_all_grammartical_mistakes("I is Paul."))
+print(count_negative_parallelism("We live in capitalism, its power seems inescapable — but then, so did the divine right of kings. Any human power can be resisted and changed by human beings. Resistance and change often begin in art. Very often in our art, the art of words."))
+print(count_negative_parallelism("a Not just x but y. ain't x rather k. That’s not just a sourcing issue—it's a systemic bias. The issue here isn't just sourcing—it's framing. The issue here is not just sourcing—it's framing. Constitutes not only a work of self-representation, but a visual document. huh"))
