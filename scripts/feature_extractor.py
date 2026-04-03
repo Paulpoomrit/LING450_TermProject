@@ -20,7 +20,7 @@ class Feature(Enum):
     VOCAB = 10
     # ------------------- Group B: Features related to content ------------------- #
     NEG_PARALLELISM = 11
-    RULE_OF_THREE = 12 #TODO
+    RULE_OF_THREE = 12
     BASIC_COPULATIVE = 13 #TODO
     ELEG_VARIATION = 14 #TODO
     # ------------------------- Group C: Binary features ------------------------- #
@@ -50,7 +50,7 @@ ai_vocab = ["additionally","align with","boasts","bolstered",
             "valuable","vibrant"]
 
 
-def count_all_words_in_list(text: str, words: list[str]):
+def count_all_words_in_list(text: str, words: list[str]) -> int:
     total_count: int = 0
 
     text = text.lower()
@@ -69,7 +69,7 @@ def count_all_grammartical_mistakes(text: str) -> int:
     return -1
 
 
-def negative_parallelism_ratio(text: str) -> int:
+def negative_parallelism_ratio(text: str) -> float:
     """ Returns the ratio of sentences with negative parallelism to
     all sentences with negative sentiment
     (that does or does not come with its parallel counterpart). """
@@ -84,7 +84,13 @@ def negative_parallelism_ratio(text: str) -> int:
     return len(neg_paralleism_match)/ len(all_neg_match)
 
 
-def rule_of_three_ratio(text: str) -> int:
+def rule_of_three_ratio(text: str) -> float:
+    """ Returns the ratio of sentences, giving three examples,
+    divided by the total number of all sentences.
+    his is being extracted by considering the form
+    that such a sentence usually presents itself in,
+    that is, three words/phrases mediated by “,” in the middle. """
+
     total_num_senteces = 0
     total_rule_of_three_sentences = 0
     sentences = nltk.sent_tokenize(text)
@@ -111,6 +117,26 @@ def rule_of_three_ratio(text: str) -> int:
     return total_rule_of_three_sentences/total_num_senteces
 
 
+def basic_copulative(text: str) -> float:
+    """  Returns the ratio of basic copulative words
+    to the number of all white-space separated tokens. """
+    
+    work_tokens = nltk.word_tokenize(text)
+    total_num_tokens = len(work_tokens)
+
+    if total_num_tokens == 0:
+        return 0
+
+    basic_cop_pattern = re.compile(r"\bis\b|\bare\b|\bam\b|\bbeing\b|\bwas\b|\bwere\b|\bbeen\b|\bbe\b")
+    match = basic_cop_pattern.findall(text)
+    num_basic_cop = len(match)
+
+    if num_basic_cop == 0:
+        return 0
+
+    return num_basic_cop/total_num_tokens
+
+
 def extract_group_a(text: str, feature_type: Feature, total_num_words: int):
 
     if feature_type == Feature.VOCAB:
@@ -134,4 +160,6 @@ def extract_features(document_path: str):
 # print(negative_parallelism_ratio("We live in capitalism, its power seems inescapable — but then, so did the divine right of kings. Any human power can be resisted and changed by human beings. Resistance and change often begin in art. Very often in our art, the art of words."))
 # print(negative_parallelism_ratio("a Not just x but y. ain't x rather k. That’s not just a sourcing issue—it's a systemic bias. The issue here isn't just sourcing—it's framing. The issue here is not just sourcing—it's framing. Constitutes not only a work of self-representation, but a visual document. huh"))
 
-print(rule_of_three_ratio("This is so insane, right brother? The Amaze Conference brings together global SEO professionals, marketing experts, and growth hackers to discuss the latest trends in digital marketing. The event features keynote sessions, panel discussions, and networking opportunities."))
+# print(rule_of_three_ratio("This is so insane, right brother? The Amaze Conference brings together global SEO professionals, marketing experts, and growth hackers to discuss the latest trends in digital marketing. The event features keynote sessions, panel discussions, and networking opportunities."))
+print(basic_copulative("Gallery 825 on [[La Cienega Boulevard]], which was purchased in 1958, is LAAA's exhibition arm for [[contemporary art]]. There are four individual gallery spaces[...]"))
+print(basic_copulative("Gallery 825 on [[La Cienega Boulevard]] serves as LAAA's exhibition space for contemporary art. The gallery features four separate spaces[...]"))
