@@ -40,11 +40,11 @@ class Feature(IntEnum):
 
 regex_dict: dict[Feature, str] = {
     Feature.EMDASH: r"—",
-    Feature.BOLD: r"<b>|<strong>", #HTML only
+    Feature.BOLD: r"<b>|<strong>",  # HTML only
     Feature.TITLE_CASE: r"^(?:[A-Z][^\s]*\s?)+",
-    Feature.LIST: r"<ul>|<ol>", #HTML only
+    Feature.LIST: r"<ul>|<ol>",  # HTML only
     Feature.CURLY_QUOTATION: r"‘|“",
-    Feature.TABLE: r"<table>", #HTML only
+    Feature.TABLE: r"<table>",  # HTML only
     Feature.TEMPLATE: r"\[.+\]",
     Feature.SUBJECT_LINE: r"subject: "
 }
@@ -208,52 +208,53 @@ def if_words_exist(text: str, word_list: list[str]) -> bool:
     return False
 
 
-def extract_feature_for_text(text: str):
-    print(f"text: {text}\n")
+def extract_features(text: str) -> np.array:
     num_words: int = len(text.split())
-    print(f"num words: {num_words}\n")
-
-    assert(num_words > 0)
-
     text_vec = np.zeros(16)
-    text_vec[int(Feature.EMDASH)] = extract_group_a(text, Feature.EMDASH, num_words)
-    text_vec[int(Feature.EMOJI)] = extract_group_a(text, Feature.EMOJI, num_words)
-    text_vec[int(Feature.BOLD)] = extract_group_a(text, Feature.BOLD, num_words)
-    text_vec[int(Feature.TITLE_CASE)] = extract_group_a(text, Feature.TITLE_CASE, num_words)
-    text_vec[int(Feature.LIST)] = extract_group_a(text, Feature.LIST, num_words)
-    text_vec[int(Feature.CURLY_QUOTATION)] = extract_group_a(text, Feature.CURLY_QUOTATION, num_words)
-    text_vec[int(Feature.TABLE)] = extract_group_a(text, Feature.TABLE, num_words)
-    text_vec[int(Feature.TEMPLATE)] = extract_group_a(text, Feature.TEMPLATE, num_words)
 
-    text_vec[int(Feature.GRAMMAR)] = count_all_grammartical_mistakes(text) / num_words
-    text_vec[int(Feature.VOCAB)] = count_all_words_in_list(text, ai_vocab) / num_words
+    # print(f"text: {text}\n")
+    # print(f"num words: {num_words}\n")
+
+    if num_words <= 0:
+        return text_vec
+    text_vec[int(Feature.EMDASH)] = extract_group_a(
+        text, Feature.EMDASH, num_words)
+    text_vec[int(Feature.EMOJI)] = extract_group_a(
+        text, Feature.EMOJI, num_words)
+    text_vec[int(Feature.BOLD)] = extract_group_a(
+        text, Feature.BOLD, num_words)
+    text_vec[int(Feature.TITLE_CASE)] = extract_group_a(
+        text, Feature.TITLE_CASE, num_words)
+    text_vec[int(Feature.LIST)] = extract_group_a(
+        text, Feature.LIST, num_words)
+    text_vec[int(Feature.CURLY_QUOTATION)] = extract_group_a(
+        text, Feature.CURLY_QUOTATION, num_words)
+    text_vec[int(Feature.TABLE)] = extract_group_a(
+        text, Feature.TABLE, num_words)
+    text_vec[int(Feature.TEMPLATE)] = extract_group_a(
+        text, Feature.TEMPLATE, num_words)
+
+    text_vec[int(Feature.GRAMMAR)] = count_all_grammartical_mistakes(
+        text) / num_words
+    text_vec[int(Feature.VOCAB)] = count_all_words_in_list(
+        text, ai_vocab) / num_words
 
     text_vec[int(Feature.NEG_PARALLELISM)] = negative_parallelism_ratio(text)
     text_vec[int(Feature.RULE_OF_THREE)] = rule_of_three_ratio(text)
     text_vec[int(Feature.BASIC_COPULATIVE)] = basic_copulative_ratio(text)
     text_vec[int(Feature.ELEG_VARIATION)] = eleg_variation_ratio(text)
 
-    text_vec[int(Feature.SUBJECT_LINE)] = is_there_the_following_pattern(text, regex_dict[Feature.SUBJECT_LINE])
+    text_vec[int(Feature.SUBJECT_LINE)] = is_there_the_following_pattern(
+        text, regex_dict[Feature.SUBJECT_LINE])
     text_vec[int(Feature.SUMMARY)] = if_words_exist(text, summary_words)
 
-
-    print(text_vec)
-
+    return text_vec
 
 
+# ---------------------------------------------------------------------------- #
+#                                     Test                                     #
+# ---------------------------------------------------------------------------- #
 
-    print("------------\n")
-
-
-def extract_features(document_path: str):
-    with open(document_path, 'r') as file:
-        for line in file:
-            # TODO: extract feature here
-            print(line)
-            print('-----')
-
-
-# Test
 # extract_features("/Users/paulpoomrit/1_SFU/8_Spring_2026/LING450_CompLing/LING450_TermProject/data/coca-samples-text/text_acad.txt")
 # print(count_all_grammartical_mistakes("I is Paul."))
 # print(negative_parallelism_ratio("We live in capitalism, its power seems inescapable — but then, so did the divine right of kings. Any human power can be resisted and changed by human beings. Resistance and change often begin in art. Very often in our art, the art of words."))
@@ -272,42 +273,40 @@ def extract_features(document_path: str):
 
 # print(if_words_exist("the educational and training trajectory for nurse scientists typically involves a progression from a master's degree in nursing to a Doctor of Philosophy in Nursing, followed by postdoctoral training in nursing research. This structured pathway ensures that nurse scientists acquire the necessary knowledge and skills to engage in rigorous research and contribute meaningfully to the advancement of nursing science.", summary_words))
 
-# extract_feature_for_text("test")
-# extract_feature_for_text("This is a test for emdash—there are two of them here. Yes—there are two of them.")
-# extract_feature_for_text("This is test text for emoji 😻. It currently ⏱️ has a total of… 🤩 4 emojis 4️⃣.")
-# extract_feature_for_text("I'm very <b> BOLD.")
-# extract_feature_for_text("‘<table><ul>This Is The Title. My name is Paul HI.‘")
-# extract_feature_for_text("I is Paul.")
-# extract_feature_for_text('''"additionally", "align with", "boasts", "bolstered",
+# extract_features("test")
+# extract_features("This is a test for emdash—there are two of them here. Yes—there are two of them.")
+# extract_features("This is test text for emoji 😻. It currently ⏱️ has a total of… 🤩 4 emojis 4️⃣.")
+# extract_features("I'm very <b> BOLD.")
+# extract_features("‘<table><ul>This Is The Title. My name is Paul HI.‘")
+# extract_features("I is Paul.")
+# extract_features('''"additionally", "align with", "boasts", "bolstered",
 #             "crucial", "delve", "emphasizing", "enduring", "enhance"
 #             "fostering", "garner", "highlight", "interplay", "intricate",
 #             "intricacies", "key", "landscape", "meticulous", "meticulously",
 #             "pivotal", "showcase", "tapestry", "testament", "underscore"
 #             "valuable", "vibrant"''')
 
-# extract_feature_for_text("a Not just x but y. ain't x rather k. That’s not just a sourcing issue—it's a systemic bias. The issue here isn't just sourcing—it's framing. The issue here is not just sourcing—it's framing. Constitutes not only a work of self-representation, but a visual document. huh")
-# extract_feature_for_text("This is one, two, and three")
+# extract_features("a Not just x but y. ain't x rather k. That’s not just a sourcing issue—it's a systemic bias. The issue here isn't just sourcing—it's framing. The issue here is not just sourcing—it's framing. Constitutes not only a work of self-representation, but a visual document. huh")
+# extract_features("This is one, two, and three")
 
-# extract_feature_for_text("This is me.")
-# extract_feature_for_text("This serves as me.")
+# extract_features("This is me.")
+# extract_features("This serves as me.")
 
-# extract_feature_for_text("I like cats. Cats are awesome. Cats are so cute. Cats are the best.")
-# extract_feature_for_text("I like cats. They are awesome. The kittens are so cute. Felines are the best.")
+# extract_features("I like cats. Cats are awesome. Cats are so cute. Cats are the best.")
+# extract_features("I like cats. They are awesome. The kittens are so cute. Felines are the best.")
 
-# extract_feature_for_text("Subject: i miss my ex. In conclusion, can you come back to me pls")
-# extract_feature_for_text("i miss my ex. can you come back to me pls")
+# extract_features("Subject: i miss my ex. In conclusion, can you come back to me pls")
+# extract_features("i miss my ex. can you come back to me pls")
 
-extract_feature_for_text("We live in capitalism, its power seems inescapable — but then, so did the divine right of kings. Any human power can be resisted and changed by human beings. Resistance and change often begin in art. Very often in our art, the art of words.")
-extract_feature_for_text('''<p><strong>Summary:</strong> Systems that seem permanent can be challenged—and transformation often begins with creative expression.</p>
+# extract_features("We live in capitalism, its power seems inescapable — but then, so did the divine right of kings. Any human power can be resisted and changed by human beings. Resistance and change often begin in art. Very often in our art, the art of words.")
+# extract_features('''<p><strong>Summary:</strong> Systems that seem permanent can be challenged—and transformation often begins with creative expression.</p>
 
-<p>
-  We live in capitalism; its power appears inescapable, yet the same was once said of the divine right of kings.
-  Human systems are not fixed but constructed—shaped, sustained, and ultimately changed by people.
-</p>
+# <p>
+#   We live in capitalism; its power appears inescapable, yet the same was once said of the divine right of kings.
+#   Human systems are not fixed but constructed—shaped, sustained, and ultimately changed by people.
+# </p>
 
-<p>
-  Change does not arise from a single source, but through <strong>thought, action, and imagination</strong>.
-  Resistance often begins in art, especially in the art of words, where ideas are formed, questioned, and shared.
-</p>''')
-
-
+# <p>
+#   Change does not arise from a single source, but through <strong>thought, action, and imagination</strong>.
+#   Resistance often begins in art, especially in the art of words, where ideas are formed, questioned, and shared.
+# </p>''')
