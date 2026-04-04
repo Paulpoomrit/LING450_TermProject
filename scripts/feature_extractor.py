@@ -1,3 +1,5 @@
+from scipy import spatial
+import gensim.downloader as api
 from enum import Enum
 import re
 import language_tool_python
@@ -8,9 +10,8 @@ nltk.download('averaged_perceptron_tagger_eng')
 nltk.download('universal_tagset')
 
 # for word2vec
-import gensim.downloader as api
 word_2_vec = api.load("glove-wiki-gigaword-50")
-from scipy import spatial
+
 
 class Feature(Enum):
     # --------- Group A: Features related to language, grammar and style --------- #
@@ -28,12 +29,12 @@ class Feature(Enum):
     NEG_PARALLELISM = 11
     RULE_OF_THREE = 12
     BASIC_COPULATIVE = 13
-    ELEG_VARIATION = 14 #TODO
+    ELEG_VARIATION = 14
     # ------------------------- Group C: Binary features ------------------------- #
-    SUBJECT_LINE = 15 #TODO
-    COMMUNICATION = 16 #TODO
-    KNOWLEDGE_CUTOFF = 17 #TODO
-    SUMMARY = 18 #TODO
+    SUBJECT_LINE = 15  # TODO
+    COMMUNICATION = 16  # TODO
+    KNOWLEDGE_CUTOFF = 17  # TODO
+    SUMMARY = 18  # TODO
 
 
 regex_dict: dict[Feature, str] = {
@@ -44,16 +45,21 @@ regex_dict: dict[Feature, str] = {
     Feature.LIST: r"<ul>|<ol>",
     Feature.CURLY_QUOTATION: r"‘|“",
     Feature.TABLE: r"<table>",
-    Feature.TEMPLATE: r"\[.+\]"
+    Feature.TEMPLATE: r"\[.+\]",
+    Feature.SUBJECT_LINE: r"subject: "
 }
 
 
-ai_vocab = ["additionally","align with","boasts","bolstered",
-            "crucial","delve","emphasizing","enduring","enhance"
-            "fostering","garner","highlight","interplay","intricate",
-            "intricacies","key","landscape","meticulous","meticulously",
-            "pivotal","showcase","tapestry","testament","underscore"
-            "valuable","vibrant"]
+ai_vocab = ["additionally", "align with", "boasts", "bolstered",
+            "crucial", "delve", "emphasizing", "enduring", "enhance"
+            "fostering", "garner", "highlight", "interplay", "intricate",
+            "intricacies", "key", "landscape", "meticulous", "meticulously",
+            "pivotal", "showcase", "tapestry", "testament", "underscore"
+            "valuable", "vibrant"]
+
+summary_words = ["in summary", "in conclusion", "overall", "to conclude", "to put it briefly",
+                 "all things considered", "as a final point", "in a nutshell", "the long and the short of it",
+                 "finally", "lastly", "ultimately"]
 
 
 def count_all_words_in_list(text: str, words: list[str]) -> int:
@@ -81,13 +87,15 @@ def negative_parallelism_ratio(text: str) -> float:
     (that does or does not come with its parallel counterpart). """
 
     text = text.lower()
-    neg_paralleism_match = re.findall(r"(?:(?:\bnot\b|\bno\b){1}|\bain['’]t\b|\bisn['’]t\b|\bis not\b)(?:.*?(?:\bbut\b|\bhowever\b|\brather\b|\bis\b|['’]s))", text)
-    all_neg_match = re.findall(r"(?:(?:\bnot\b|\bno\b){1}|\bain['’]t\b|\bisn['’]t\b|\bis not\b)", text)
+    neg_paralleism_match = re.findall(
+        r"(?:(?:\bnot\b|\bno\b){1}|\bain['’]t\b|\bisn['’]t\b|\bis not\b)(?:.*?(?:\bbut\b|\bhowever\b|\brather\b|\bis\b|['’]s))", text)
+    all_neg_match = re.findall(
+        r"(?:(?:\bnot\b|\bno\b){1}|\bain['’]t\b|\bisn['’]t\b|\bis not\b)", text)
 
     if len(neg_paralleism_match) == 0:
         return 0
 
-    return len(neg_paralleism_match)/ len(all_neg_match)
+    return len(neg_paralleism_match) / len(all_neg_match)
 
 
 def rule_of_three_ratio(text: str) -> float:
@@ -106,7 +114,6 @@ def rule_of_three_ratio(text: str) -> float:
         total_num_senteces += 1
         # print(sentence)
         match = rule_of_three_regex.findall(sentence)
-
 
         if len(match) > 0:
             match_list = list(match[0])
@@ -133,7 +140,8 @@ def basic_copulative_ratio(text: str) -> float:
     if total_num_tokens == 0:
         return 0
 
-    basic_cop_pattern = re.compile(r"\bis\b|\bare\b|\bam\b|\bbeing\b|\bwas\b|\bwere\b|\bbeen\b|\bbe\b")
+    basic_cop_pattern = re.compile(
+        r"\bis\b|\bare\b|\bam\b|\bbeing\b|\bwas\b|\bwere\b|\bbeen\b|\bbe\b")
     match = basic_cop_pattern.findall(text)
     num_basic_cop = len(match)
 
@@ -150,7 +158,7 @@ def eleg_variation_ratio(text: str) -> str:
 
     for word in words:
         word = word.lower()
-        word_vec = word_2_vec[word] # grab word vector
+        word_vec = word_2_vec[word]  # grab word vector
         word_matrix.append(word_vec)
 
     # Computes the cosine distance between each pair of the word vector
@@ -158,6 +166,18 @@ def eleg_variation_ratio(text: str) -> str:
     avg = np.average(pairwise_dist)
 
     return avg
+
+
+def is_there_the_following_pattern(pattern: str, text: str) -> bool:
+
+    subject_line_regex = re.compile(pattern, flags=re.IGNORECASE)
+    match = re.findall(subject_line_regex, text)
+
+    if len(match) > 0:
+        return True
+    else:
+        return False
+
 
 def extract_group_a(text: str, feature_type: Feature, total_num_words: int):
 
@@ -169,16 +189,26 @@ def extract_group_a(text: str, feature_type: Feature, total_num_words: int):
     return len(match_list) / total_num_words
 
 
-def extract_features(document_path: str):
-   with open(document_path, 'r') as file:
-       for line in file:
-           # TODO: extract feature here
-           print(line)
-           print('-----')
+def if_words_exist(text: str, word_list: list[str]) -> bool:
+    for word in word_list:
+        word = word.lower()
+        match_list = re.findall(word, text, flags=re.IGNORECASE)
+        if len(match_list) >= 1:
+            return True
 
-## Test
-#extract_features("/Users/paulpoomrit/1_SFU/8_Spring_2026/LING450_CompLing/LING450_TermProject/data/coca-samples-text/text_acad.txt")
-#print(count_all_grammartical_mistakes("I is Paul."))
+    return False
+
+
+def extract_features(document_path: str):
+    with open(document_path, 'r') as file:
+        for line in file:
+            # TODO: extract feature here
+            print(line)
+            print('-----')
+
+# Test
+# extract_features("/Users/paulpoomrit/1_SFU/8_Spring_2026/LING450_CompLing/LING450_TermProject/data/coca-samples-text/text_acad.txt")
+# print(count_all_grammartical_mistakes("I is Paul."))
 # print(negative_parallelism_ratio("We live in capitalism, its power seems inescapable — but then, so did the divine right of kings. Any human power can be resisted and changed by human beings. Resistance and change often begin in art. Very often in our art, the art of words."))
 # print(negative_parallelism_ratio("a Not just x but y. ain't x rather k. That’s not just a sourcing issue—it's a systemic bias. The issue here isn't just sourcing—it's framing. The issue here is not just sourcing—it's framing. Constitutes not only a work of self-representation, but a visual document. huh"))
 
@@ -188,3 +218,8 @@ def extract_features(document_path: str):
 
 # print(eleg_variation_ratio("animal creature beast"))
 # print(eleg_variation_ratio("Vierny, after a visit in Moscow in the early 1970’s, committed to supporting artists resisting the constraints of socialist realism and discovered Yankilevskly, among others such as Ilya Kabakov and Erik Bulatov. In the challenging climate of Soviet artistic constraints, Yankilevsky, alongside other non-conformist artists, faced obstacles in expressing their creativity freely. Dina Vierny, recognizing the immense talent and the struggle these artists endured, played a pivotal role in aiding their artistic aspirations. [...]"))
+
+
+print(is_there_subject_line(
+    "Subject: Request for Permission to Edit Wikipedia Article"))
+print(is_there_subject_line("Request for Permission to Edit Wikipedia Article"))
