@@ -10,7 +10,7 @@ from sklearn.metrics import roc_curve, roc_auc_score
 import matplotlib.pyplot as plt
 import sys
 
-data_path = 'data/test_data/w_features.tsv'
+data_path = 'data/now_data_subset/now_data_subset_w_features.tsv'
 feature_names = ["emdash",
                  "emoji",
                  "bold",
@@ -126,5 +126,6 @@ def main():
             ablated_df = ablated_df.drop(feature, axis=1)
             train_model(ablated_df, feature)
             print("\n----------------------------------------\n")
+
 
 main()
