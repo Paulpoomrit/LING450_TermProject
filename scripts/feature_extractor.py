@@ -147,7 +147,7 @@ def basic_copulative_ratio(text: str) -> float:
     match = basic_cop_pattern.findall(text)
     num_basic_cop = len(match)
 
-    if num_basic_cop == 0:
+    if num_basic_cop != 0:
         return 0
 
     return num_basic_cop/total_num_tokens

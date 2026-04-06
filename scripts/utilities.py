@@ -34,6 +34,43 @@ def extract_features_and_save(data_path: str, dest_path: str) -> None:
     feature_vectors = []
     count = 0
     for r in df.itertuples(index=False):
+        count += 1
+        print(f'Extracting features for sentence: {count} / {len(df)} ')
+        feature_vectors.append(extract_features(r.text))
+
+    # print(feature_vectors)
+
+    feature_names = ["emdash",
+                     "emoji",
+                     "bold",
+                     "title_case",
+                     "list",
+                     "curly_quotation",
+                     "table",
+                     "template",
+                     "grammar",
+                     "vocab",
+                     "neg_parallelism",
+                     "rule_of_three",
+                     "basic_copulative",
+                     "eleg_variation",
+                     "subject_line",
+                     "summary"
+                     ]
+    features_df = pd.DataFrame(feature_vectors, columns=feature_names)
+
+    df = pd.concat([df, features_df], axis=1)
+    print(df)
+    df.to_csv(dest_path, sep='\t')
+
+
+def get_feature_vectors(data_path: str) -> pd.DataFrame:
+    df = pd.read_csv(data_path, sep='\t', index_col=False)
+    # print(df['text'])
+
+    feature_vectors = []
+    count = 0
+    for r in df.itertuples(index=False):
 
         print(f'Extracting features for sentence: {count} / {df.size} ')
         feature_vectors.append(extract_features(r.text))
@@ -41,8 +78,8 @@ def extract_features_and_save(data_path: str, dest_path: str) -> None:
 
     # print(feature_vectors)
     df['vector'] = feature_vectors
-    print(df)
-    df.to_csv(dest_path, sep='\t')
+    return df
+
 
 
 
