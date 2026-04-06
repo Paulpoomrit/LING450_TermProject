@@ -39,14 +39,14 @@ class Feature(IntEnum):
 
 
 regex_dict: dict[Feature, str] = {
-    Feature.EMDASH: r"—",
-    Feature.BOLD: r"<b>|<strong>",  # HTML only
-    Feature.TITLE_CASE: r"^(?:[A-Z][^\s]*\s?)+",
+    Feature.EMDASH: r"—|--",
+    Feature.BOLD: r"<b>|<strong>|\*\*\w+\*\*|\*\*\ \w+ \*\*",
+    Feature.TITLE_CASE: r"(?:(?:[A-Z][^\s]*\s?)+)|<h>",
     Feature.LIST: r"<ul>|<ol>",  # HTML only
     Feature.CURLY_QUOTATION: r"‘|“",
     Feature.TABLE: r"<table>",  # HTML only
     Feature.TEMPLATE: r"\[.+\]",
-    Feature.SUBJECT_LINE: r"subject: "
+    Feature.SUBJECT_LINE: r"subject:|title:"
 }
 
 
@@ -182,6 +182,14 @@ def is_there_the_following_pattern(text: str, pattern: str) -> bool:
         return False
 
 
+def count_all_list(text: str) -> int:
+    numex = r"(?:^(\d{1,2}\.)+\d{0,2})|(?:^-)"
+    rex = re.compile(numex,flags=re.I|re.M)
+    list_arr = rex.findall(text)
+    print(list_arr)
+    return len(list_arr)
+
+
 def extract_group_a(text: str, feature_type: Feature, total_num_words: int):
 
     if feature_type == Feature.VOCAB:
@@ -189,6 +197,9 @@ def extract_group_a(text: str, feature_type: Feature, total_num_words: int):
 
     if feature_type == Feature.EMOJI:
         return len(list(emoji.analyze(text))) / total_num_words
+
+    if feature_type == Feature.LIST:
+        return count_all_list(text) / total_num_words
 
     regex = regex_dict[feature_type]
     match_list = re.findall(regex, text)
@@ -310,3 +321,30 @@ def extract_features(text: str) -> np.array:
 #   Change does not arise from a single source, but through <strong>thought, action, and imagination</strong>.
 #   Resistance often begins in art, especially in the art of words, where ideas are formed, questioned, and shared.
 # </p>''')
+
+# print(count_all_list('''
+# To make Chicken Kritharaki, follow these step-by-step instructions:
+
+# Ingredients:
+# - 4 boneless chicken thighs
+# - 1 medium onion, finely chopped
+# - 2 cloves garlic, minced
+# - 2 tablespoons olive oil
+# - 1 teaspoon dried oregano
+# - 1 teaspoon dried thyme
+# - 1 teaspoon dried basil
+# - 1 teaspoon ground cinnamon
+# - 1 teaspoon ground cumin
+# - 1/2 teaspoon ground allspice
+# - 1/4 teaspoon ground cloves
+# - 1/4 teaspoon ground nutmeg
+# - 1/4 teaspoon ground black pepper
+# - 1/4 teaspoon ground ginger
+# - Salt, to taste
+# - 1/2 cup chicken broth
+# - 1 cup fresh or frozen peas
+# - Lemon wedges, for serving
+
+# Instructions:
+
+# 1. In a large bowl, combine the chopped on'''))

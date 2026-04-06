@@ -7,10 +7,10 @@ def clean_and_convert_to_tsv(csv_path: str, dest_path: str) -> None:
 
     with open(csv_path) as f:
         content = f.read()
-        content_new = re.sub(pattern=r",AI,",
+        content_new = re.sub(pattern=r",AI",
                              repl=r"\tAI\t",
                              string=content)
-        content_new = re.sub(pattern=r",H,",
+        content_new = re.sub(pattern=r",H",
                              repl=r"\tH\t",
                              string=content_new)
 
@@ -28,8 +28,8 @@ def clean_and_convert_to_tsv(csv_path: str, dest_path: str) -> None:
 
 def extract_features_and_save(data_path: str, dest_path: str) -> None:
 
-    #df = pd.read_csv(data_path, sep='\t', index_col=False) # for tsv
-    df = pd.read_csv(data_path, index_col=False)
+    df = pd.read_csv(data_path, sep='\t', index_col=False) # for tsv
+    # df = pd.read_csv(data_path, index_col=False) # for csv
     # print(df['text'])
 
     feature_vectors = []
@@ -84,5 +84,5 @@ def get_feature_vectors(data_path: str) -> pd.DataFrame:
 
 
 
-#clean_and_convert_to_tsv('data/test_data/test_corrupt.csv', 'data/test_data/test_not_corrupt.tsv')
-extract_features_and_save('data/now_data_subset/now_data_subset.csv', 'data/now_data_subset/now_data_subset_w_features.csv')
+# clean_and_convert_to_tsv('data/now_data_subset/now_data_subset.csv', 'data/now_data_subset/now_data_subset_formatted.tsv')
+extract_features_and_save('data/now_data_subset/now_data_subset_formatted.tsv', 'data/now_data_subset/now_data_subset_w_features.tsv')
