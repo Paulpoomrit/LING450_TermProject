@@ -42,12 +42,12 @@ def train_model(df: pd.DataFrame, ablated_feature: str):
     X = df[feature_list].values
 
     X_train, X_test, y_train, y_test = train_test_split(X, y,
-                                                        test_size=0.2,
+                                                        test_size=0.3,
                                                         random_state=104,
                                                         shuffle=True)
 
     model = RandomForestClassifier(
-        n_estimators=500, max_leaf_nodes=16, n_jobs=-1, random_state=42)
+        n_estimators=30, max_leaf_nodes=5, max_depth=3, n_jobs=-1, random_state=42)
     model.fit(X_train, y_train)
 
     y_pred = model.predict(X_test)
@@ -92,8 +92,9 @@ def train_model(df: pd.DataFrame, ablated_feature: str):
     print(f"AUROC:  {roc_auc:.2f}")
 
     print("\n---Feature importance---\n")
-    for score, name in zip(model.feature_importances_, df.columns):
-        print(f"| {name} | {round(score, 2)} |")
+    importances = model.feature_importances_
+    feature_imp_df = pd.DataFrame({'Feature': feature_list, 'Gini Importance': importances}).sort_values('Gini Importance', ascending=False)
+    print(feature_imp_df)
     print("\n------------------------\n")
 
     # Visualize tree

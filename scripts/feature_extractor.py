@@ -40,7 +40,7 @@ class Feature(IntEnum):
 
 regex_dict: dict[Feature, str] = {
     Feature.EMDASH: r"—|--",
-    Feature.BOLD: r"<b>|<strong>|\*\*\w+\*\*|\*\*\ \w+ \*\*",
+    Feature.BOLD: r"<b>|<strong>|\*\*.+\*\*|\*\*",
     Feature.TITLE_CASE: r"(?:(?:[A-Z][^\s]*\s?)+)|<h>",
     Feature.LIST: r"<ul>|<ol>",  # HTML only
     Feature.CURLY_QUOTATION: r"‘|“",
@@ -147,7 +147,7 @@ def basic_copulative_ratio(text: str) -> float:
     match = basic_cop_pattern.findall(text)
     num_basic_cop = len(match)
 
-    if num_basic_cop != 0:
+    if num_basic_cop == 0:
         return 0
 
     return num_basic_cop/total_num_tokens
@@ -272,8 +272,8 @@ def extract_features(text: str) -> np.array:
 # print(negative_parallelism_ratio("a Not just x but y. ain't x rather k. That’s not just a sourcing issue—it's a systemic bias. The issue here isn't just sourcing—it's framing. The issue here is not just sourcing—it's framing. Constitutes not only a work of self-representation, but a visual document. huh"))
 
 # print(rule_of_three_ratio("This is so insane, right brother? The Amaze Conference brings together global SEO professionals, marketing experts, and growth hackers to discuss the latest trends in digital marketing. The event features keynote sessions, panel discussions, and networking opportunities."))
-# print(basic_copulative("Gallery 825 on [[La Cienega Boulevard]], which was purchased in 1958, is LAAA's exhibition arm for [[contemporary art]]. There are four individual gallery spaces[...]"))
-# print(basic_copulative("Gallery 825 on [[La Cienega Boulevard]] serves as LAAA's exhibition space for contemporary art. The gallery features four separate spaces[...]"))
+#print(basic_copulative_ratio("Gallery 825 on [[La Cienega Boulevard]], which was purchased in 1958, is LAAA's exhibition arm for [[contemporary art]]. There are four individual gallery spaces[...]"))
+#print(basic_copulative_ratio("Gallery 825 on [[La Cienega Boulevard]] serves as LAAA's exhibition space for contemporary art. The gallery features four separate spaces[...]"))
 
 # print(eleg_variation_ratio("animal creature beast"))
 # print(eleg_variation_ratio("Vierny, after a visit in Moscow in the early 1970’s, committed to supporting artists resisting the constraints of socialist realism and discovered Yankilevskly, among others such as Ilya Kabakov and Erik Bulatov. In the challenging climate of Soviet artistic constraints, Yankilevsky, alongside other non-conformist artists, faced obstacles in expressing their creativity freely. Dina Vierny, recognizing the immense talent and the struggle these artists endured, played a pivotal role in aiding their artistic aspirations. [...]"))

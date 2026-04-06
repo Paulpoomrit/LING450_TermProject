@@ -1,9 +1,17 @@
 digraph Tree {
 node [shape=box, style="filled, rounded", color="black", fontname="helvetica"] ;
 edge [fontname="helvetica"] ;
-0 [label=<eleg_variation &le; 0.475<br/>gini = 0.497<br/>samples = 8<br/>value = [6, 7]<br/>class = AI>, fillcolor="#e3f1fb"] ;
-1 [label=<gini = 0.0<br/>samples = 4<br/>value = [6, 0]<br/>class = human>, fillcolor="#e58139"] ;
+0 [label=<grammar &le; 0.073<br/>gini = 0.5<br/>samples = 277<br/>value = [227, 222]<br/>class = human>, fillcolor="#fefcfb"] ;
+1 [label=<gini = 0.0<br/>samples = 139<br/>value = [221, 0]<br/>class = human>, fillcolor="#e58139"] ;
 0 -> 1 [labeldistance=2.5, labelangle=45, headlabel="True"] ;
-2 [label=<gini = 0.0<br/>samples = 4<br/>value = [0, 7]<br/>class = AI>, fillcolor="#399de5"] ;
+2 [label=<grammar &le; 0.104<br/>gini = 0.051<br/>samples = 138<br/>value = [6, 222]<br/>class = AI>, fillcolor="#3ea0e6"] ;
 0 -> 2 [labeldistance=2.5, labelangle=-45, headlabel="False"] ;
+3 [label=<neg_parallelism &le; 0.167<br/>gini = 0.219<br/>samples = 26<br/>value = [6, 42]<br/>class = AI>, fillcolor="#55abe9"] ;
+2 -> 3 ;
+5 [label=<gini = 0.365<br/>samples = 13<br/>value = [6, 19]<br/>class = AI>, fillcolor="#78bced"] ;
+3 -> 5 ;
+6 [label=<gini = 0.0<br/>samples = 13<br/>value = [0, 23]<br/>class = AI>, fillcolor="#399de5"] ;
+3 -> 6 ;
+4 [label=<gini = 0.0<br/>samples = 112<br/>value = [0, 180]<br/>class = AI>, fillcolor="#399de5"] ;
+2 -> 4 ;
 }
