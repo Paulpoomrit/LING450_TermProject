@@ -1,0 +1,578 @@
+
+----------------------------------------
+
+All features
+Accuracy:  1.00
+Precision: 1.00
+Recall:    1.00
+F1 Score:  1.00
+AUROC:  1.00
+
+---Feature importance---
+
+| Unnamed: 0 | 0.0 |
+| text | 0.0 |
+| label | 0.0 |
+| emdash | 0.0 |
+| emoji | 0.0 |
+| bold | 0.0 |
+| title_case | 0.0 |
+| list | 0.0 |
+| curly_quotation | 0.25 |
+| table | 0.02 |
+| template | 0.28 |
+| grammar | 0.15 |
+| vocab | 0.0 |
+| neg_parallelism | 0.27 |
+| rule_of_three | 0.0 |
+| basic_copulative | 0.02 |
+
+------------------------
+
+
+----------------------------------------
+
+
+----------------------------------------
+
+Ablated feature: emdash
+removing: emdash
+Accuracy:  1.00
+Precision: 1.00
+Recall:    1.00
+F1 Score:  1.00
+AUROC:  1.00
+
+---Feature importance---
+
+| Unnamed: 0 | 0.0 |
+| text | 0.0 |
+| label | 0.0 |
+| emoji | 0.0 |
+| bold | 0.0 |
+| title_case | 0.0 |
+| list | 0.0 |
+| curly_quotation | 0.26 |
+| table | 0.02 |
+| template | 0.27 |
+| grammar | 0.18 |
+| vocab | 0.0 |
+| neg_parallelism | 0.25 |
+| rule_of_three | 0.0 |
+| basic_copulative | 0.02 |
+
+------------------------
+
+
+----------------------------------------
+
+
+----------------------------------------
+
+Ablated feature: emoji
+removing: emoji
+Accuracy:  1.00
+Precision: 1.00
+Recall:    1.00
+F1 Score:  1.00
+AUROC:  1.00
+
+---Feature importance---
+
+| Unnamed: 0 | 0.0 |
+| text | 0.0 |
+| label | 0.0 |
+| emdash | 0.0 |
+| bold | 0.0 |
+| title_case | 0.0 |
+| list | 0.0 |
+| curly_quotation | 0.26 |
+| table | 0.02 |
+| template | 0.27 |
+| grammar | 0.18 |
+| vocab | 0.0 |
+| neg_parallelism | 0.25 |
+| rule_of_three | 0.0 |
+| basic_copulative | 0.02 |
+
+------------------------
+
+
+----------------------------------------
+
+
+----------------------------------------
+
+Ablated feature: bold
+removing: bold
+Accuracy:  1.00
+Precision: 1.00
+Recall:    1.00
+F1 Score:  1.00
+AUROC:  1.00
+
+---Feature importance---
+
+| Unnamed: 0 | 0.0 |
+| text | 0.0 |
+| label | 0.0 |
+| emdash | 0.0 |
+| emoji | 0.0 |
+| title_case | 0.0 |
+| list | 0.0 |
+| curly_quotation | 0.26 |
+| table | 0.02 |
+| template | 0.27 |
+| grammar | 0.18 |
+| vocab | 0.0 |
+| neg_parallelism | 0.25 |
+| rule_of_three | 0.0 |
+| basic_copulative | 0.02 |
+
+------------------------
+
+
+----------------------------------------
+
+
+----------------------------------------
+
+Ablated feature: title_case
+removing: title_case
+Accuracy:  1.00
+Precision: 1.00
+Recall:    1.00
+F1 Score:  1.00
+AUROC:  1.00
+
+---Feature importance---
+
+| Unnamed: 0 | 0.0 |
+| text | 0.0 |
+| label | 0.0 |
+| emdash | 0.0 |
+| emoji | 0.0 |
+| bold | 0.0 |
+| list | 0.0 |
+| curly_quotation | 0.26 |
+| table | 0.02 |
+| template | 0.27 |
+| grammar | 0.18 |
+| vocab | 0.0 |
+| neg_parallelism | 0.25 |
+| rule_of_three | 0.0 |
+| basic_copulative | 0.02 |
+
+------------------------
+
+
+----------------------------------------
+
+
+----------------------------------------
+
+Ablated feature: list
+removing: list
+Accuracy:  1.00
+Precision: 1.00
+Recall:    1.00
+F1 Score:  1.00
+AUROC:  1.00
+
+---Feature importance---
+
+| Unnamed: 0 | 0.0 |
+| text | 0.0 |
+| label | 0.0 |
+| emdash | 0.0 |
+| emoji | 0.0 |
+| bold | 0.0 |
+| title_case | 0.0 |
+| curly_quotation | 0.26 |
+| table | 0.02 |
+| template | 0.27 |
+| grammar | 0.18 |
+| vocab | 0.0 |
+| neg_parallelism | 0.25 |
+| rule_of_three | 0.0 |
+| basic_copulative | 0.02 |
+
+------------------------
+
+
+----------------------------------------
+
+
+----------------------------------------
+
+Ablated feature: curly_quotation
+removing: curly_quotation
+Accuracy:  1.00
+Precision: 1.00
+Recall:    1.00
+F1 Score:  1.00
+AUROC:  1.00
+
+---Feature importance---
+
+| Unnamed: 0 | 0.0 |
+| text | 0.0 |
+| label | 0.0 |
+| emdash | 0.0 |
+| emoji | 0.0 |
+| bold | 0.0 |
+| title_case | 0.0 |
+| list | 0.26 |
+| table | 0.02 |
+| template | 0.27 |
+| grammar | 0.18 |
+| vocab | 0.0 |
+| neg_parallelism | 0.25 |
+| rule_of_three | 0.0 |
+| basic_copulative | 0.02 |
+
+------------------------
+
+
+----------------------------------------
+
+
+----------------------------------------
+
+Ablated feature: table
+removing: table
+Accuracy:  1.00
+Precision: 1.00
+Recall:    1.00
+F1 Score:  1.00
+AUROC:  1.00
+
+---Feature importance---
+
+| Unnamed: 0 | 0.0 |
+| text | 0.0 |
+| label | 0.0 |
+| emdash | 0.0 |
+| emoji | 0.0 |
+| bold | 0.0 |
+| title_case | 0.0 |
+| list | 0.26 |
+| curly_quotation | 0.02 |
+| template | 0.27 |
+| grammar | 0.18 |
+| vocab | 0.0 |
+| neg_parallelism | 0.25 |
+| rule_of_three | 0.0 |
+| basic_copulative | 0.02 |
+
+------------------------
+
+
+----------------------------------------
+
+
+----------------------------------------
+
+Ablated feature: template
+removing: template
+Accuracy:  1.00
+Precision: 1.00
+Recall:    1.00
+F1 Score:  1.00
+AUROC:  1.00
+
+---Feature importance---
+
+| Unnamed: 0 | 0.0 |
+| text | 0.0 |
+| label | 0.0 |
+| emdash | 0.0 |
+| emoji | 0.0 |
+| bold | 0.0 |
+| title_case | 0.0 |
+| list | 0.26 |
+| curly_quotation | 0.02 |
+| table | 0.27 |
+| grammar | 0.18 |
+| vocab | 0.0 |
+| neg_parallelism | 0.25 |
+| rule_of_three | 0.0 |
+| basic_copulative | 0.02 |
+
+------------------------
+
+
+----------------------------------------
+
+
+----------------------------------------
+
+Ablated feature: grammar
+removing: grammar
+Accuracy:  1.00
+Precision: 1.00
+Recall:    1.00
+F1 Score:  1.00
+AUROC:  1.00
+
+---Feature importance---
+
+| Unnamed: 0 | 0.0 |
+| text | 0.0 |
+| label | 0.0 |
+| emdash | 0.0 |
+| emoji | 0.0 |
+| bold | 0.0 |
+| title_case | 0.0 |
+| list | 0.0 |
+| curly_quotation | 0.04 |
+| table | 0.36 |
+| template | 0.23 |
+| vocab | 0.0 |
+| neg_parallelism | 0.34 |
+| rule_of_three | 0.0 |
+| basic_copulative | 0.03 |
+
+------------------------
+
+
+----------------------------------------
+
+
+----------------------------------------
+
+Ablated feature: vocab
+removing: vocab
+Accuracy:  1.00
+Precision: 1.00
+Recall:    1.00
+F1 Score:  1.00
+AUROC:  1.00
+
+---Feature importance---
+
+| Unnamed: 0 | 0.0 |
+| text | 0.0 |
+| label | 0.0 |
+| emdash | 0.0 |
+| emoji | 0.0 |
+| bold | 0.0 |
+| title_case | 0.0 |
+| list | 0.0 |
+| curly_quotation | 0.27 |
+| table | 0.28 |
+| template | 0.17 |
+| grammar | 0.0 |
+| neg_parallelism | 0.25 |
+| rule_of_three | 0.0 |
+| basic_copulative | 0.03 |
+
+------------------------
+
+
+----------------------------------------
+
+
+----------------------------------------
+
+Ablated feature: neg_parallelism
+removing: neg_parallelism
+Accuracy:  1.00
+Precision: 1.00
+Recall:    1.00
+F1 Score:  1.00
+AUROC:  1.00
+
+---Feature importance---
+
+| Unnamed: 0 | 0.0 |
+| text | 0.0 |
+| label | 0.0 |
+| emdash | 0.0 |
+| emoji | 0.0 |
+| bold | 0.0 |
+| title_case | 0.0 |
+| list | 0.0 |
+| curly_quotation | 0.36 |
+| table | 0.04 |
+| template | 0.22 |
+| grammar | 0.0 |
+| vocab | 0.35 |
+| rule_of_three | 0.0 |
+| basic_copulative | 0.03 |
+
+------------------------
+
+
+----------------------------------------
+
+
+----------------------------------------
+
+Ablated feature: rule_of_three
+removing: rule_of_three
+Accuracy:  1.00
+Precision: 1.00
+Recall:    1.00
+F1 Score:  1.00
+AUROC:  1.00
+
+---Feature importance---
+
+| Unnamed: 0 | 0.0 |
+| text | 0.0 |
+| label | 0.0 |
+| emdash | 0.0 |
+| emoji | 0.0 |
+| bold | 0.0 |
+| title_case | 0.0 |
+| list | 0.0 |
+| curly_quotation | 0.31 |
+| table | 0.04 |
+| template | 0.31 |
+| grammar | 0.0 |
+| vocab | 0.31 |
+| neg_parallelism | 0.0 |
+| basic_copulative | 0.03 |
+
+------------------------
+
+
+----------------------------------------
+
+
+----------------------------------------
+
+Ablated feature: basic_copulative
+removing: basic_copulative
+Accuracy:  1.00
+Precision: 1.00
+Recall:    1.00
+F1 Score:  1.00
+AUROC:  1.00
+
+---Feature importance---
+
+| Unnamed: 0 | 0.0 |
+| text | 0.0 |
+| label | 0.0 |
+| emdash | 0.0 |
+| emoji | 0.0 |
+| bold | 0.0 |
+| title_case | 0.0 |
+| list | 0.0 |
+| curly_quotation | 0.26 |
+| table | 0.03 |
+| template | 0.25 |
+| grammar | 0.17 |
+| vocab | 0.26 |
+| neg_parallelism | 0.0 |
+| rule_of_three | 0.02 |
+
+------------------------
+
+
+----------------------------------------
+
+
+----------------------------------------
+
+Ablated feature: eleg_variation
+removing: eleg_variation
+Accuracy:  1.00
+Precision: 1.00
+Recall:    1.00
+F1 Score:  1.00
+AUROC:  1.00
+
+---Feature importance---
+
+| Unnamed: 0 | 0.0 |
+| text | 0.0 |
+| label | 0.0 |
+| emdash | 0.0 |
+| emoji | 0.0 |
+| bold | 0.0 |
+| title_case | 0.0 |
+| list | 0.0 |
+| curly_quotation | 0.36 |
+| table | 0.04 |
+| template | 0.36 |
+| grammar | 0.21 |
+| vocab | 0.0 |
+| neg_parallelism | 0.0 |
+| rule_of_three | 0.03 |
+
+------------------------
+
+
+----------------------------------------
+
+
+----------------------------------------
+
+Ablated feature: subject_line
+removing: subject_line
+Accuracy:  1.00
+Precision: 1.00
+Recall:    1.00
+F1 Score:  1.00
+AUROC:  1.00
+
+---Feature importance---
+
+| Unnamed: 0 | 0.0 |
+| text | 0.0 |
+| label | 0.0 |
+| emdash | 0.0 |
+| emoji | 0.0 |
+| bold | 0.0 |
+| title_case | 0.0 |
+| list | 0.0 |
+| curly_quotation | 0.27 |
+| table | 0.02 |
+| template | 0.26 |
+| grammar | 0.15 |
+| vocab | 0.0 |
+| neg_parallelism | 0.28 |
+| rule_of_three | 0.02 |
+
+------------------------
+
+
+----------------------------------------
+
+
+----------------------------------------
+
+Ablated feature: summary
+removing: summary
+Accuracy:  1.00
+Precision: 1.00
+Recall:    1.00
+F1 Score:  1.00
+AUROC:  1.00
+
+---Feature importance---
+
+| Unnamed: 0 | 0.0 |
+| text | 0.0 |
+| label | 0.0 |
+| emdash | 0.0 |
+| emoji | 0.0 |
+| bold | 0.0 |
+| title_case | 0.0 |
+| list | 0.0 |
+| curly_quotation | 0.26 |
+| table | 0.03 |
+| template | 0.26 |
+| grammar | 0.17 |
+| vocab | 0.0 |
+| neg_parallelism | 0.29 |
+| rule_of_three | 0.0 |
+
+------------------------
+
+
+----------------------------------------
+

@@ -32,7 +32,7 @@ feature_names = ["emdash",
 
 def train_model(df: pd.DataFrame, ablated_feature: str):
 
-    feature_list = feature_names
+    feature_list = feature_names.copy()
 
     if ablated_feature in feature_list:
         print(f'removing: {ablated_feature}')
@@ -71,8 +71,9 @@ def train_model(df: pd.DataFrame, ablated_feature: str):
     plt.ylabel('True Positive Rate')
     plt.title('ROC Curve')
     plt.legend(loc="lower right")
-    plt.savefig(f"results/{feature}/yame_wout_{feature}_auroc.png")
+    plt.savefig(f"results/{ablated_feature}/yame_wout_{ablated_feature}_auroc.png")
     # # plt.show()
+    plt.clf()
 
     # Plot the predicted class probabilities
     plt.hist(y_pred_prob, bins=10)
@@ -80,8 +81,9 @@ def train_model(df: pd.DataFrame, ablated_feature: str):
     plt.title('Histogram of predicted probabilities')
     plt.xlabel('Predicted probability of text being labelled "AI"')
     plt.ylabel('Frequency')
-    plt.savefig(f"results/{feature}/yame_wout_{feature}_pred_prob.png")
+    plt.savefig(f"results/{ablated_feature}/yame_wout_{ablated_feature}_pred_prob.png")
     # # plt.show()
+    plt.clf()
 
     print(f"Accuracy:  {accuracy:.2f}")
     print(f"Precision: {precision:.2f}")
@@ -95,12 +97,12 @@ def train_model(df: pd.DataFrame, ablated_feature: str):
     print("\n------------------------\n")
 
     # Visualize tree
-    dot_file_path = f"results/{feature}/yame_wout_{feature}.dot"
+    dot_file_path = f"results/{ablated_feature}/yame_wout_{ablated_feature}.dot"
     export_graphviz(
-        model,
+        model.estimators_[0],
         out_file=dot_file_path,
         feature_names=feature_list,
-        class_names={'human', 'AI'},
+        class_names= ['human', 'AI'],
         filled=True,
         rounded=True,
         special_characters=True
@@ -108,13 +110,13 @@ def train_model(df: pd.DataFrame, ablated_feature: str):
 
 
 def main():
-    with open('results.txt', 'w') as sys.stdout:
+    with open('results/results.txt', 'w') as sys.stdout:
         df = pd.read_csv(data_path, sep='\t', index_col=False)
         df = df.dropna()
 
         print("\n----------------------------------------\n")
         print(f"All features")
-        train_model(df, 'none')
+        train_model(df, 'full')
         print("\n----------------------------------------\n")
 
         for feature in feature_names:
@@ -124,3 +126,5 @@ def main():
             ablated_df = ablated_df.drop(feature, axis=1)
             train_model(ablated_df, feature)
             print("\n----------------------------------------\n")
+
+main()
